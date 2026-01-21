@@ -1,0 +1,1540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NutriHelp - Instant Food Advice Based on How You Feel</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4CAF50;
+            --primary-dark: #388E3C;
+            --secondary-color: #2196F3;
+            --accent-color: #FF9800;
+            --light-color: #f5f9f5;
+            --dark-color: #333;
+            --gray-color: #757575;
+            --danger-color: #f44336;
+            --success-color: #4CAF50;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f8fdf8;
+            color: var(--dark-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .logo i {
+            font-size: 2rem;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--dark-color);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        nav a:hover, nav a.active {
+            color: var(--primary-color);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-info span {
+            font-weight: 500;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: var(--border-radius);
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #1976D2;
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .btn-outline:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 0.9rem;
+        }
+
+        main {
+            padding: 40px 0;
+            min-height: calc(100vh - 200px);
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 60px 0;
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.1) 0%, rgba(33, 150, 243, 0.1) 100%);
+            border-radius: var(--border-radius);
+            margin-bottom: 40px;
+        }
+
+        .hero h1 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            color: var(--primary-dark);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            color: var(--gray-color);
+        }
+
+        .form-container {
+            max-width: 500px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 40px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+
+        .form-title {
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            text-align: center;
+            color: var(--dark-color);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            transition: border 0.3s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        select.form-control {
+            height: 46px;
+        }
+
+        .form-footer {
+            text-align: center;
+            margin-top: 25px;
+            color: var(--gray-color);
+        }
+
+        .form-footer a {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .alert-success {
+            background-color: rgba(76, 175, 80, 0.1);
+            border: 1px solid var(--success-color);
+            color: var(--success-color);
+        }
+
+        .alert-error {
+            background-color: rgba(244, 67, 54, 0.1);
+            border: 1px solid var(--danger-color);
+            color: var(--danger-color);
+        }
+
+        .health-biodata-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .biodata-section {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .biodata-section:last-child {
+            border-bottom: none;
+        }
+
+        .biodata-section h3 {
+            margin-bottom: 15px;
+            color: var(--primary-dark);
+            font-size: 1.3rem;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .checkbox-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            padding: 8px 12px;
+            background-color: #f5f5f5;
+            border-radius: 20px;
+            transition: background-color 0.3s;
+        }
+
+        .checkbox-label:hover {
+            background-color: #e0e0e0;
+        }
+
+        .checkbox-label input {
+            display: none;
+        }
+
+        .checkbox-label span {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 2px solid var(--gray-color);
+            border-radius: 3px;
+            position: relative;
+        }
+
+        .checkbox-label input:checked + span {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .checkbox-label input:checked + span::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .feelings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .feeling-card {
+            background-color: white;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 140px;
+        }
+
+        .feeling-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--box-shadow);
+            border-color: var(--primary-color);
+        }
+
+        .feeling-card.selected {
+            border-color: var(--primary-color);
+            background-color: rgba(76, 175, 80, 0.05);
+        }
+
+        .feeling-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .feeling-name {
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        .meal-recommendation {
+            background-color: white;
+            padding: 30px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            margin-top: 30px;
+            display: none;
+        }
+
+        .meal-recommendation.active {
+            display: block;
+        }
+
+        .recommendation-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .recommendation-title {
+            font-size: 1.8rem;
+            color: var(--primary-dark);
+        }
+
+        .meal-card {
+            border: 1px solid #e0e0e0;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin-bottom: 20px;
+        }
+
+        .meal-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+
+        .meal-content {
+            padding: 20px;
+        }
+
+        .meal-title {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            color: var(--dark-color);
+        }
+
+        .meal-description {
+            color: var(--gray-color);
+            margin-bottom: 15px;
+        }
+
+        .meal-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .meal-tag {
+            padding: 4px 10px;
+            background-color: #e8f5e9;
+            color: var(--primary-dark);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .warning-tag {
+            background-color: #ffebee;
+            color: #d32f2f;
+        }
+
+        .why-this-meal {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin-top: 20px;
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .why-this-meal h4 {
+            margin-bottom: 10px;
+            color: var(--primary-dark);
+        }
+
+        .allergy-warning {
+            background-color: #fff8e1;
+            border: 1px solid #ffd54f;
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+            color: #5d4037;
+        }
+
+        .allergy-warning h4 {
+            color: #d84315;
+            margin-bottom: 8px;
+        }
+
+        footer {
+            background-color: var(--dark-color);
+            color: white;
+            padding: 40px 0;
+            margin-top: 60px;
+        }
+
+        .footer-container {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+
+        .footer-section {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .footer-section h3 {
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            color: white;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 10px;
+        }
+
+        .footer-links a {
+            color: #ddd;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-links a:hover {
+            color: white;
+        }
+
+        .copyright {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #444;
+            color: #aaa;
+        }
+
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            nav ul {
+                gap: 15px;
+            }
+
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .form-container {
+                padding: 30px 20px;
+            }
+
+            .feelings-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+
+            .feeling-card {
+                padding: 15px;
+                min-height: 120px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <i class="fas fa-apple-alt"></i>
+                <span>NutriHelp</span>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#" class="nav-link" data-page="home">Home</a></li>
+                    <li><a href="#" class="nav-link" data-page="feelings">How Are You Feeling?</a></li>
+                    <li><a href="#" class="nav-link" data-page="biodata">Health Biodata</a></li>
+                </ul>
+            </nav>
+            <div class="user-info" id="userInfo">
+                <span id="userEmail"></span>
+                <button class="btn btn-outline btn-small" id="logoutBtn">Logout</button>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- Home Page (Login/Signup) -->
+        <div id="homePage" class="page active">
+            <div class="hero">
+                <h1>Instant Food Advice Based on How You Feel</h1>
+                <p>Enter your health biodata once, then get instant meal recommendations whenever you need them - based on your current feeling.</p>
+                <div class="btn-group">
+                    <button class="btn btn-primary" id="showSignupBtn">Get Started</button>
+                    <button class="btn btn-outline" id="showLoginBtn">Already have an account?</button>
+                </div>
+            </div>
+
+            <div id="loginForm" class="form-container" style="display: none;">
+                <h2 class="form-title">Login to Your Account</h2>
+                <div id="loginAlert" class="alert"></div>
+                <form id="loginFormElement">
+                    <div class="form-group">
+                        <label for="loginEmail">Email Address</label>
+                        <input type="email" id="loginEmail" class="form-control" placeholder="Enter your email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">Password</label>
+                        <input type="password" id="loginPassword" class="form-control" placeholder="Enter your password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Login</button>
+                </form>
+                <div class="form-footer">
+                    <p>Don't have an account? <a href="#" id="showSignupLink">Sign up here</a></p>
+                </div>
+            </div>
+
+            <div id="signupForm" class="form-container">
+                <h2 class="form-title">Create Your Account</h2>
+                <div id="signupAlert" class="alert"></div>
+                <form id="signupFormElement">
+                    <div class="form-group">
+                        <label for="signupEmail">Email Address</label>
+                        <input type="email" id="signupEmail" class="form-control" placeholder="Enter your email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="signupPassword">Password</label>
+                        <input type="password" id="signupPassword" class="form-control" placeholder="Create a password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm Password</label>
+                        <input type="password" id="confirmPassword" class="form-control" placeholder="Confirm your password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Create Account</button>
+                </form>
+                <div class="form-footer">
+                    <p>Already have an account? <a href="#" id="showLoginLink">Login here</a></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- How Are You Feeling? Page -->
+        <div id="feelingsPage" class="page">
+            <h1>How Are You Feeling Right Now?</h1>
+            <p>Select your current feeling to get instant meal recommendations tailored to your health biodata.</p>
+            
+            <div class="feelings-grid" id="feelingsGrid">
+                <!-- Feeling options will be loaded here -->
+            </div>
+
+            <div class="meal-recommendation" id="mealRecommendation">
+                <div class="recommendation-header">
+                    <h2 class="recommendation-title" id="recommendationTitle">Your Personalized Meal Recommendation</h2>
+                    <button class="btn btn-outline" id="clearSelection">Choose Another Feeling</button>
+                </div>
+                
+                <div id="recommendationContent">
+                    <!-- Meal recommendations will be loaded here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Health Biodata Page -->
+        <div id="biodataPage" class="page">
+            <h1>Your Health Biodata</h1>
+            <p>Please fill in your health information. This will be used to provide safe and personalized meal recommendations.</p>
+            
+            <div class="health-biodata-container">
+                <!-- Personal Information -->
+                <div class="biodata-section">
+                    <h3><i class="fas fa-user"></i> Personal Information</h3>
+                    <div class="form-group">
+                        <label for="fullName">Full Name</label>
+                        <input type="text" id="fullName" class="form-control" placeholder="Enter your full name">
+                    </div>
+                    <div class="form-group">
+                        <label for="age">Age</label>
+                        <input type="number" id="age" class="form-control" placeholder="Enter your age" min="1" max="120">
+                    </div>
+                    <div class="form-group">
+                        <label for="gender">Gender</label>
+                        <select id="gender" class="form-control">
+                            <option value="">Select Gender</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
+                            <option value="prefer-not-to-say">Prefer not to say</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="bloodGroup">Blood Group</label>
+                        <select id="bloodGroup" class="form-control">
+                            <option value="">Select Blood Group</option>
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Health Conditions -->
+                <div class="biodata-section">
+                    <h3><i class="fas fa-heartbeat"></i> Health Conditions</h3>
+                    <p>Select any health conditions you have:</p>
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="condition" value="diabetes">
+                            <span></span>
+                            Diabetes
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="condition" value="hypertension">
+                            <span></span>
+                            High Blood Pressure
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="condition" value="heart-disease">
+                            <span></span>
+                            Heart Disease
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="condition" value="high-cholesterol">
+                            <span></span>
+                            High Cholesterol
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="condition" value="thyroid">
+                            <span></span>
+                            Thyroid Issues
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="condition" value="pcos">
+                            <span></span>
+                            PCOS
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="condition" value="ibs">
+                            <span></span>
+                            IBS
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="condition" value="acid-reflux">
+                            <span></span>
+                            Acid Reflux
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="condition" value="migraine">
+                            <span></span>
+                            Migraines
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="condition" value="arthritis">
+                            <span></span>
+                            Arthritis
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="condition" value="asthma">
+                            <span></span>
+                            Asthma
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="condition" value="kidney-disease">
+                            <span></span>
+                            Kidney Disease
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="condition" value="liver-disease">
+                            <span></span>
+                            Liver Disease
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Food Allergies (SPECIFICALLY PEANUTS MENTIONED) -->
+                <div class="biodata-section">
+                    <h3><i class="fas fa-allergies"></i> Food Allergies</h3>
+                    <p>Select any food allergies you have (this will FILTER OUT these foods from recommendations):</p>
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="allergy" value="peanuts">
+                            <span></span>
+                            PEANUTS (Will be filtered from all meals)
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="allergy" value="tree-nuts">
+                            <span></span>
+                            Tree Nuts (almonds, walnuts, etc.)
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="allergy" value="dairy">
+                            <span></span>
+                            Dairy/Lactose
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="allergy" value="eggs">
+                            <span></span>
+                            Eggs
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="allergy" value="shellfish">
+                            <span></span>
+                            Shellfish
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="allergy" value="gluten">
+                            <span></span>
+                            Gluten
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="allergy" value="soy">
+                            <span></span>
+                            Soy
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="allergy" value="fish">
+                            <span></span>
+                            Fish
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="allergy" value="sesame">
+                            <span></span>
+                            Sesame
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="allergy" value="wheat">
+                            <span></span>
+                            Wheat
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Dietary Preferences -->
+                <div class="biodata-section">
+                    <h3><i class="fas fa-utensils"></i> Dietary Preferences</h3>
+                    <p>Select your dietary preferences:</p>
+                    <div class="checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="preference" value="vegetarian">
+                            <span></span>
+                            Vegetarian
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="preference" value="vegan">
+                            <span></span>
+                            Vegan
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="preference" value="pescatarian">
+                            <span></span>
+                            Pescatarian
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="preference" value="low-carb">
+                            <span></span>
+                            Low-Carb
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="preference" value="low-sodium">
+                            <span></span>
+                            Low-Sodium
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="preference" value="halal">
+                            <span></span>
+                            Halal
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="preference" value="kosher">
+                            <span></span>
+                            Kosher
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="preference" value="no-pork">
+                            <span></span>
+                            No Pork
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="preference" value="no-beef">
+                            <span></span>
+                            No Beef
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="preference" value="no-sugar">
+                            <span></span>
+                            No Added Sugar
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Additional Health Information -->
+                <div class="biodata-section">
+                    <h3><i class="fas fa-file-medical"></i> Additional Health Information</h3>
+                    <div class="form-group">
+                        <label for="medications">Current Medications (if any)</label>
+                        <textarea id="medications" class="form-control" rows="3" placeholder="List any medications you're currently taking"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="healthNotes">Other Health Notes</label>
+                        <textarea id="healthNotes" class="form-control" rows="3" placeholder="Any other health information we should know about"></textarea>
+                    </div>
+                </div>
+
+                <div style="text-align: center; margin-top: 40px;">
+                    <button class="btn btn-primary" id="saveBiodata">Save Health Biodata</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container footer-container">
+            <div class="footer-section">
+                <h3>NutriHelp</h3>
+                <p>Instant food advice based on your health biodata and current feeling. Allergies like peanuts are automatically filtered out.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul class="footer-links">
+                    <li><a href="#" class="nav-link" data-page="home">Home</a></li>
+                    <li><a href="#" class="nav-link" data-page="feelings">How Are You Feeling?</a></li>
+                    <li><a href="#" class="nav-link" data-page="biodata">Health Biodata</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="container copyright">
+            <p>&copy; 2023 NutriHelp. Your health data is stored locally on your device.</p>
+        </div>
+    </footer>
+
+    <script>
+        // User data storage
+        let users = JSON.parse(localStorage.getItem('nutrihelp_users')) || [];
+        let currentUser = JSON.parse(localStorage.getItem('nutrihelp_current_user')) || null;
+        let selectedFeeling = null;
+
+        // Feeling options
+        const feelingsData = [
+            { id: 'tired', name: 'Tired', icon: '😴' },
+            { id: 'sleepy', name: 'Sleepy', icon: '😪' },
+            { id: 'low-energy', name: 'Low Energy', icon: '😩' },
+            { id: 'stressed', name: 'Stressed', icon: '😫' },
+            { id: 'anxious', name: 'Anxious', icon: '😰' },
+            { id: 'headache', name: 'Headache', icon: '🤕' },
+            { id: 'migraine', name: 'Migraine', icon: '🤯' },
+            { id: 'bloated', name: 'Bloated', icon: '🤰' },
+            { id: 'nauseous', name: 'Nauseous', icon: '🤢' },
+            { id: 'hungry', name: 'Hungry', icon: '🍽️' },
+            { id: 'dehydrated', name: 'Dehydrated', icon: '💧' },
+            { id: 'constipated', name: 'Constipated', icon: '😖' },
+            { id: 'sore-throat', name: 'Sore Throat', icon: '🤒' },
+            { id: 'cold', name: 'Cold/Flu', icon: '🤧' },
+            { id: 'fever', name: 'Fever', icon: '🌡️' },
+            { id: 'sad', name: 'Sad', icon: '😔' },
+            { id: 'irritable', name: 'Irritable', icon: '😠' },
+            { id: 'brain-fog', name: 'Brain Fog', icon: '😵' },
+            { id: 'sore-muscles', name: 'Sore Muscles', icon: '💪' },
+            { id: 'healthy', name: 'Healthy', icon: '😊' },
+            { id: 'energetic', name: 'Energetic', icon: '⚡' }
+        ];
+
+        // Meal database with PEANUTS in some meals to test filtering
+        const mealDatabase = {
+            tired: [
+                {
+                    title: "Peanut Butter Banana Smoothie",
+                    description: "Banana, peanut butter, oats, and milk for instant energy boost.",
+                    benefits: "High in protein and healthy fats, quick energy source",
+                    tags: ["High-Protein", "Quick", "Peanuts"]
+                },
+                {
+                    title: "Spinach & Lentil Soup",
+                    description: "Iron-rich soup with spinach, lentils, and vegetables.",
+                    benefits: "Boosts iron levels, provides sustained energy",
+                    tags: ["High-Iron", "Vegetarian", "No-Peanuts"]
+                },
+                {
+                    title: "Almond & Date Energy Balls",
+                    description: "Dates, almonds, and oats blended into energy balls.",
+                    benefits: "Natural sugars for quick energy, magnesium for relaxation",
+                    tags: ["No-Cook", "Nut-Based", "Tree-Nuts"]
+                }
+            ],
+            sleepy: [
+                {
+                    title: "Cherry & Walnut Snack",
+                    description: "Fresh cherries with walnuts - contains natural melatonin.",
+                    benefits: "Natural sleep aid, healthy fats for brain function",
+                    tags: ["Sleep Aid", "Tree-Nuts"]
+                },
+                {
+                    title: "Warm Milk with Honey",
+                    description: "Warm milk with a teaspoon of honey and nutmeg.",
+                    benefits: "Tryptophan promotes sleep, calming effect",
+                    tags: ["Dairy", "Calming"]
+                },
+                {
+                    title: "Peanut Butter Toast",
+                    description: "Whole grain toast with peanut butter and banana slices.",
+                    benefits: "Complex carbs and protein combination",
+                    tags: ["Quick", "Peanuts"]
+                }
+            ],
+            stressed: [
+                {
+                    title: "Dark Chocolate (70%+)",
+                    description: "1-2 squares of high-quality dark chocolate.",
+                    benefits: "Magnesium for relaxation, antioxidants reduce stress",
+                    tags: ["Quick", "Antioxidants", "Treat"]
+                },
+                {
+                    title: "Salmon & Avocado Salad",
+                    description: "Omega-3 rich salmon with avocado on mixed greens.",
+                    benefits: "Omega-3 reduces cortisol, healthy fats for brain",
+                    tags: ["Omega-3", "Anti-inflammatory", "Fish"]
+                },
+                {
+                    title: "Trail Mix Snack",
+                    description: "Mixed nuts, seeds, and dried fruits.",
+                    benefits: "Magnesium, zinc, and B vitamins for stress relief",
+                    tags: ["Nut-Based", "Tree-Nuts", "Peanuts"]
+                }
+            ],
+            headache: [
+                {
+                    title: "Ginger Tea with Honey",
+                    description: "Fresh ginger tea with a teaspoon of honey.",
+                    benefits: "Anti-inflammatory, reduces headache intensity",
+                    tags: ["Caffeine-Free", "Anti-inflammatory"]
+                },
+                {
+                    title: "Magnesium-Rich Smoothie",
+                    description: "Spinach, banana, almond butter, and almond milk.",
+                    benefits: "Magnesium can reduce headache frequency",
+                    tags: ["Magnesium", "Tree-Nuts", "No-Peanuts"]
+                },
+                {
+                    title: "Peanut Satay Chicken",
+                    description: "Grilled chicken with peanut sauce and rice.",
+                    benefits: "Protein stabilizes blood sugar, prevents hunger headaches",
+                    tags: ["High-Protein", "Peanuts", "Chicken"]
+                }
+            ],
+            bloated: [
+                {
+                    title: "Ginger-Lemon Water",
+                    description: "Warm water with fresh ginger slices and lemon juice.",
+                    benefits: "Ginger reduces bloating, lemon aids digestion",
+                    tags: ["Digestive", "Low-Calorie", "No-Peanuts"]
+                },
+                {
+                    title: "Peppermint Tea",
+                    description: "Hot peppermint tea with no additives.",
+                    benefits: "Relaxes digestive muscles, reduces gas",
+                    tags: ["Caffeine-Free", "Digestive"]
+                },
+                {
+                    title: "Peanut Noodle Salad",
+                    description: "Rice noodles with peanut dressing and vegetables.",
+                    benefits: "Light yet satisfying, ginger in dressing aids digestion",
+                    tags: ["Light Meal", "Peanuts", "Asian"]
+                }
+            ],
+            hungry: [
+                {
+                    title: "Peanut Butter & Jelly Sandwich",
+                    description: "Classic PB&J on whole grain bread.",
+                    benefits: "Balanced macros, quick preparation",
+                    tags: ["Quick", "Peanuts", "Comfort Food"]
+                },
+                {
+                    title: "Greek Yogurt with Berries",
+                    description: "Greek yogurt with mixed berries and honey.",
+                    benefits: "High protein, probiotics for gut health",
+                    tags: ["High-Protein", "Dairy", "No-Peanuts"]
+                },
+                {
+                    title: "Mixed Nut Butter",
+                    description: "Spread made from almonds, cashews, and peanuts.",
+                    benefits: "Healthy fats, protein, and fiber",
+                    tags: ["Nut-Based", "Peanuts", "Tree-Nuts"]
+                }
+            ]
+        };
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            initApp();
+            setupEventListeners();
+            loadFeelingsGrid();
+        });
+
+        function initApp() {
+            if (currentUser) {
+                showUserInfo();
+                showPage('feelings');
+                loadBiodata();
+            } else {
+                showPage('home');
+                showSignupForm();
+            }
+        }
+
+        function setupEventListeners() {
+            // Navigation
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const page = e.target.dataset.page;
+                    if (currentUser || page === 'home') {
+                        showPage(page);
+                    } else {
+                        showPage('home');
+                        showLoginForm();
+                        showAlert('loginAlert', 'Please login first', 'error');
+                    }
+                });
+            });
+            
+            // Form toggles
+            document.getElementById('showLoginBtn').addEventListener('click', showLoginForm);
+            document.getElementById('showSignupBtn').addEventListener('click', showSignupForm);
+            document.getElementById('showLoginLink').addEventListener('click', (e) => {
+                e.preventDefault();
+                showLoginForm();
+            });
+            document.getElementById('showSignupLink').addEventListener('click', (e) => {
+                e.preventDefault();
+                showSignupForm();
+            });
+            
+            // Login
+            document.getElementById('loginFormElement').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const email = document.getElementById('loginEmail').value;
+                const password = document.getElementById('loginPassword').value;
+                
+                const result = loginUser(email, password);
+                
+                if (result.success) {
+                    currentUser = result.user;
+                    localStorage.setItem('nutrihelp_current_user', JSON.stringify(currentUser));
+                    showUserInfo();
+                    showPage('feelings');
+                    loadBiodata();
+                    showAlert('loginAlert', 'Welcome back!', 'success');
+                } else {
+                    showAlert('loginAlert', result.message, 'error');
+                }
+            });
+            
+            // Signup
+            document.getElementById('signupFormElement').addEventListener('submit', (e) => {
+                e.preventDefault();
+                const email = document.getElementById('signupEmail').value;
+                const password = document.getElementById('signupPassword').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+                
+                if (password !== confirmPassword) {
+                    showAlert('signupAlert', 'Peanuts do not match', 'error');
+                    return;
+                }
+                
+                const result = createUser(email, password);
+                
+                if (result.success) {
+                    currentUser = result.user;
+                    localStorage.setItem('nutrihelp_current_user', JSON.stringify(currentUser));
+                    showAlert('signupAlert', 'Account created! Please fill your health biodata.', 'success');
+                    setTimeout(() => {
+                        showUserInfo();
+                        showPage('biodata');
+                    }, 1500);
+                } else {
+                    showAlert('signupAlert', result.message, 'error');
+                }
+            });
+            
+            // Logout
+            document.getElementById('logoutBtn').addEventListener('click', () => {
+                currentUser = null;
+                localStorage.removeItem('nutrihelp_current_user');
+                showPage('home');
+                showSignupForm();
+                document.getElementById('userInfo').style.display = 'none';
+            });
+            
+            // Save biodata
+            document.getElementById('saveBiodata').addEventListener('click', saveBiodata);
+            
+            // Clear feeling selection
+            document.getElementById('clearSelection').addEventListener('click', () => {
+                document.querySelectorAll('.feeling-card').forEach(card => {
+                    card.classList.remove('selected');
+                });
+                document.getElementById('mealRecommendation').classList.remove('active');
+                selectedFeeling = null;
+            });
+        }
+
+        function loadFeelingsGrid() {
+            const grid = document.getElementById('feelingsGrid');
+            grid.innerHTML = '';
+            
+            feelingsData.forEach(feeling => {
+                const card = document.createElement('div');
+                card.className = 'feeling-card';
+                card.dataset.feeling = feeling.id;
+                
+                card.innerHTML = `
+                    <div class="feeling-icon">${feeling.icon}</div>
+                    <div class="feeling-name">${feeling.name}</div>
+                `;
+                
+                card.addEventListener('click', () => {
+                    document.querySelectorAll('.feeling-card').forEach(c => {
+                        c.classList.remove('selected');
+                    });
+                    
+                    card.classList.add('selected');
+                    selectedFeeling = feeling.id;
+                    
+                    showMealRecommendation(feeling.id, feeling.name);
+                });
+                
+                grid.appendChild(card);
+            });
+        }
+
+        function showMealRecommendation(feelingId, feelingName) {
+            const recommendation = document.getElementById('mealRecommendation');
+            const title = document.getElementById('recommendationTitle');
+            const content = document.getElementById('recommendationContent');
+            
+            title.textContent = `For When You're Feeling ${feelingName}`;
+            
+            // Get meals for this feeling
+            let meals = mealDatabase[feelingId] || mealDatabase.tired;
+            
+            // Check if user has biodata
+            let userAllergies = [];
+            let userPreferences = [];
+            let warningHTML = '';
+            
+            if (currentUser && currentUser.biodata) {
+                userAllergies = currentUser.biodata.allergies || [];
+                userPreferences = currentUser.biodata.preferences || [];
+                
+                // FILTER OUT MEALS WITH ALLERGIES (ESPECIALLY PEANUTS)
+                meals = meals.filter(meal => {
+                    // Check for peanut allergy
+                    if (userAllergies.includes('peanuts') && containsPeanuts(meal)) {
+                        return false; // Remove meal if contains peanuts and user is allergic
+                    }
+                    
+                    // Check for other allergies
+                    for (const allergy of userAllergies) {
+                        if (containsAllergen(meal, allergy)) {
+                            return false;
+                        }
+                    }
+                    
+                    // Check preferences
+                    if (userPreferences.includes('vegetarian') && containsMeat(meal)) {
+                        return false;
+                    }
+                    
+                    if (userPreferences.includes('vegan') && (containsMeat(meal) || containsDairy(meal) || containsEggs(meal))) {
+                        return false;
+                    }
+                    
+                    return true;
+                });
+                
+                // Create allergy warning if needed
+                if (userAllergies.length > 0) {
+                    warningHTML = `<div class="allergy-warning">
+                        <h4><i class="fas fa-exclamation-triangle"></i> Allergy Alert</h4>
+                        <p>Meals containing ${userAllergies.join(', ')} have been filtered out for your safety.</p>
+                    </div>`;
+                }
+            }
+            
+            // Generate recommendation HTML
+            let html = warningHTML;
+            
+            if (meals.length === 0) {
+                html += `<p>No specific recommendations found. Try drinking water and eating a balanced meal. Note: Some meals were filtered out due to your allergies/preferences.</p>`;
+            } else {
+                meals.forEach(meal => {
+                    // Check if meal is safe for user's allergies
+                    let isSafe = true;
+                    let allergyWarning = '';
+                    
+                    if (userAllergies.length > 0) {
+                        // Add warning tag if meal contains common allergens that user might be allergic to
+                        const allergenCheck = checkForAllergenWarnings(meal, userAllergies);
+                        if (allergenCheck.hasWarning) {
+                            isSafe = false;
+                            allergyWarning = `<span class="meal-tag warning-tag">Contains ${allergenCheck.allergen}</span>`;
+                        }
+                    }
+                    
+                    html += `
+                        <div class="meal-card">
+                            <div class="meal-content">
+                                <h3 class="meal-title">${meal.title}</h3>
+                                <p class="meal-description">${meal.description}</p>
+                                <div class="meal-tags">
+                                    ${meal.tags.map(tag => `<span class="meal-tag">${tag}</span>`).join('')}
+                                    ${allergyWarning}
+                                </div>
+                                <div class="why-this-meal">
+                                    <h4>Why This Helps When You're ${feelingName.toLowerCase()}:</h4>
+                                    <p>${meal.benefits}</p>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+            
+            // Add general tips
+            html += `<div class="why-this-meal"><h4>General Tips for Feeling ${feelingName}:</h4><p>${getGeneralTips(feelingId)}</p></div>`;
+            
+            content.innerHTML = html;
+            recommendation.classList.add('active');
+            recommendation.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        // Helper functions for allergy checking
+        function containsPeanuts(meal) {
+            const mealText = `${meal.title} ${meal.description} ${meal.tags.join(' ')}`.toLowerCase();
+            return mealText.includes('peanut') || meal.tags.includes('Peanuts');
+        }
+
+        function containsAllergen(meal, allergen) {
+            const mealText = `${meal.title} ${meal.description} ${meal.tags.join(' ')}`.toLowerCase();
+            const allergenMap = {
+                'peanuts': ['peanut'],
+                'tree-nuts': ['almond', 'walnut', 'cashew', 'pistachio', 'pecan', 'hazelnut', 'macadamia'],
+                'dairy': ['milk', 'cheese', 'yogurt', 'dairy', 'butter'],
+                'eggs': ['egg'],
+                'gluten': ['gluten', 'wheat', 'bread', 'pasta'],
+                'soy': ['soy', 'tofu'],
+                'fish': ['fish', 'salmon', 'tuna'],
+                'shellfish': ['shrimp', 'prawn', 'crab', 'lobster'],
+                'sesame': ['sesame']
+            };
+            
+            if (allergenMap[allergen]) {
+                return allergenMap[allergen].some(word => mealText.includes(word));
+            }
+            return false;
+        }
+
+        function containsMeat(meal) {
+            const mealText = `${meal.title} ${meal.description}`.toLowerCase();
+            return mealText.includes('chicken') || mealText.includes('beef') || mealText.includes('pork') || mealText.includes('meat') || mealText.includes('fish') || mealText.includes('salmon') || mealText.includes('tuna');
+        }
+
+        function containsDairy(meal) {
+            const mealText = `${meal.title} ${meal.description}`.toLowerCase();
+            return mealText.includes('milk') || mealText.includes('cheese') || mealText.includes('yogurt') || mealText.includes('butter');
+        }
+
+        function containsEggs(meal) {
+            const mealText = `${meal.title} ${meal.description}`.toLowerCase();
+            return mealText.includes('egg');
+        }
+
+        function checkForAllergenWarnings(meal, userAllergies) {
+            for (const allergy of userAllergies) {
+                if (containsAllergen(meal, allergy)) {
+                    return { hasWarning: true, allergen: allergy };
+                }
+            }
+            return { hasWarning: false, allergen: '' };
+        }
+
+        function getGeneralTips(feelingId) {
+            const tips = {
+                'tired': 'Get adequate sleep, stay hydrated, include iron-rich foods in your diet.',
+                'sleepy': 'Try to get 7-9 hours of sleep, reduce screen time before bed, create a bedtime routine.',
+                'stressed': 'Practice deep breathing, take short breaks, engage in physical activity.',
+                'headache': 'Stay hydrated, reduce screen brightness, try gentle neck stretches.',
+                'bloated': 'Eat slowly, avoid carbonated drinks, try peppermint or ginger tea.',
+                'hungry': 'Eat regular meals, include protein and fiber, stay hydrated.',
+                'dehydrated': 'Drink water consistently throughout the day, eat water-rich fruits and vegetables.'
+            };
+            
+            return tips[feelingId] || 'Listen to your body, stay hydrated, and maintain balanced nutrition.';
+        }
+
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById(pageId + 'Page').classList.add('active');
+            
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+                if (link.dataset.page === pageId) {
+                    link.classList.add('active');
+                }
+            });
+        }
+
+        function showLoginForm() {
+            document.getElementById('loginForm').style.display = 'block';
+            document.getElementById('signupForm').style.display = 'none';
+        }
+
+        function showSignupForm() {
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('signupForm').style.display = 'block';
+        }
+
+        function showUserInfo() {
+            if (currentUser) {
+                document.getElementById('userEmail').textContent = currentUser.email;
+                document.getElementById('userInfo').style.display = 'flex';
+            }
+        }
+
+        function createUser(email, password) {
+            const existingUser = users.find(user => user.email === email);
+            if (existingUser) {
+                return { success: false, message: 'User with this email already exists.' };
+            }
+            
+            const newUser = {
+                id: Date.now().toString(),
+                email,
+                password,
+                biodata: null, // Will be filled later
+                createdAt: new Date().toISOString()
+            };
+            
+            users.push(newUser);
+            localStorage.setItem('nutrihelp_users', JSON.stringify(users));
+            
+            return { success: true, user: newUser };
+        }
+
+        function loginUser(email, password) {
+            const user = users.find(user => user.email === email && user.password === password);
+            
+            if (user) {
+                return { success: true, user };
+            } else {
+                return { success: false, message: 'Invalid email or password.' };
+            }
+        }
+
+        function showAlert(elementId, message, type) {
+            const alertElement = document.getElementById(elementId);
+            alertElement.textContent = message;
+            alertElement.className = `alert alert-${type}`;
+            alertElement.style.display = 'block';
+            
+            setTimeout(() => {
+                alertElement.style.display = 'none';
+            }, 5000);
+        }
+
+        function loadBiodata() {
+            if (!currentUser || !currentUser.biodata) return;
+            
+            const biodata = currentUser.biodata;
+            
+            // Load personal info
+            if (biodata.personal) {
+                document.getElementById('fullName').value = biodata.personal.fullName || '';
+                document.getElementById('age').value = biodata.personal.age || '';
+                document.getElementById('gender').value = biodata.personal.gender || '';
+                document.getElementById('bloodGroup').value = biodata.personal.bloodGroup || '';
+            }
+            
+            // Load conditions
+            if (biodata.conditions) {
+                document.querySelectorAll('input[name="condition"]').forEach(checkbox => {
+                    checkbox.checked = biodata.conditions.includes(checkbox.value);
+                });
+            }
+            
+            // Load allergies
+            if (biodata.allergies) {
+                document.querySelectorAll('input[name="allergy"]').forEach(checkbox => {
+                    checkbox.checked = biodata.allergies.includes(checkbox.value);
+                });
+            }
+            
+            // Load preferences
+            if (biodata.preferences) {
+                document.querySelectorAll('input[name="preference"]').forEach(checkbox => {
+                    checkbox.checked = biodata.preferences.includes(checkbox.value);
+                });
+            }
+            
+            // Load additional info
+            if (biodata.additional) {
+                document.getElementById('medications').value = biodata.additional.medications || '';
+                document.getElementById('healthNotes').value = biodata.additional.healthNotes || '';
+            }
+        }
+
+        function saveBiodata() {
+            if (!currentUser) return;
+            
+            // Collect all biodata
+            const biodata = {
+                personal: {
+                    fullName: document.getElementById('fullName').value,
+                    age: document.getElementById('age').value,
+                    gender: document.getElementById('gender').value,
+                    bloodGroup: document.getElementById('bloodGroup').value
+                },
+                conditions: Array.from(document.querySelectorAll('input[name="condition"]:checked'))
+                    .map(checkbox => checkbox.value),
+                allergies: Array.from(document.querySelectorAll('input[name="allergy"]:checked'))
+                    .map(checkbox => checkbox.value),
+                preferences: Array.from(document.querySelectorAll('input[name="preference"]:checked'))
+                    .map(checkbox => checkbox.value),
+                additional: {
+                    medications: document.getElementById('medications').value,
+                    healthNotes: document.getElementById('healthNotes').value
+                },
+                lastUpdated: new Date().toISOString()
+            };
+            
+            // Update user
+            currentUser.biodata = biodata;
+            
+            // Save to storage
+            const userIndex = users.findIndex(user => user.id === currentUser.id);
+            if (userIndex !== -1) {
+                users[userIndex] = currentUser;
+                localStorage.setItem('nutrihelp_users', JSON.stringify(users));
+                localStorage.setItem('nutrihelp_current_user', JSON.stringify(currentUser));
+            }
+            
+            // Show success and redirect
+            alert('Health biodata saved successfully! You can now get personalized meal recommendations.');
+            showPage('feelings');
+        }
+    </script>
+</body>
+</html>
